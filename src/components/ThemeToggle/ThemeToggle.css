@@ -1,0 +1,23 @@
+.theme-toggle-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid var(--border-color, #2d4059);
+  background: rgba(255, 127, 80, 0.08);
+  color: var(--accent-orange, #ff7f50);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition-fast, all 0.15s ease);
+}
+
+.theme-toggle-btn:hover {
+  background: rgba(255, 127, 80, 0.18);
+  transform: translateY(-2px);
+}
+
+.theme-toggle-btn svg {
+  width: 19px;
+  height: 19px;
+}
