@@ -1,7 +1,25 @@
+import { useLocation, useNavigate } from 'react-router-dom';
 import './Footer.css';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  // Si ya estamos en Inicio, hacemos scroll directo.
+  // Si estamos en otra página, navegamos a Inicio pasando qué sección
+  // queremos, y App.jsx (ScrollToSection) hace el scroll cuando cargue.
+  const handleSectionClick = (id) => (e) => {
+    e.preventDefault();
+    if (location.pathname === '/') {
+      const el = document.getElementById(id);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' });
+      }
+    } else {
+      navigate('/', { state: { scrollTo: id } });
+    }
+  };
 
   return (
     <footer id="contacto" className="footer">
@@ -32,10 +50,10 @@ export default function Footer() {
           <div className="footer-section">
             <h3>Enlaces Rápidos</h3>
             <ul className="footer-links">
-              <li><a href="#hero">Inicio</a></li>
-              <li><a href="#about">Nosotros</a></li>
-              <li><a href="#temario">Temario</a></li>
-              <li><a href="#preguntas">Preguntas FAQ</a></li>
+              <li><a href="#hero" onClick={handleSectionClick('hero')}>Inicio</a></li>
+              <li><a href="#about" onClick={handleSectionClick('about')}>Nosotros</a></li>
+              <li><a href="#temario" onClick={handleSectionClick('temario')}>Temario</a></li>
+              <li><a href="#preguntas" onClick={handleSectionClick('preguntas')}>Preguntas FAQ</a></li>
             </ul>
           </div>
 
