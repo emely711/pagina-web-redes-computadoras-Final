@@ -142,10 +142,12 @@
 
 .hero-description {
   font-size: 1.15rem;
-  color: var(--text-secondary);
+  color: #f5f1e8;
+  font-weight: 500;
   margin-bottom: var(--spacing-xl);
   line-height: 1.8;
   max-width: 650px; /* Ancho máximo para mejor lectura */
+  text-shadow: 0 0 8px rgba(245, 241, 232, 0.4); /* Añadido un poco de sombra para mejorar la legibilidad*/
 }
 
 /* Hero Features - Ahora en fila horizontal */
