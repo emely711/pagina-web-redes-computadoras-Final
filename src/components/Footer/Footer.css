@@ -13,7 +13,7 @@
 }
 
 .footer-section h3 {
-  color: #ffffff;
+  color: var(--text-heading, #ffffff);
   font-size: 1.1rem;
   font-weight: 600;
   margin-bottom: 1.2rem;
@@ -104,7 +104,7 @@
 }
 
 .info-item a:hover {
-  color: #ffffff;
+  color: var(--text-heading, #ffffff);
 }
 
 /* Newsletter Minimalista */
@@ -122,7 +122,7 @@
   background: transparent;
   border: none;
   padding: 0.6rem;
-  color: #ffffff;
+  color: var(--text-heading, #ffffff);
   font-size: 0.9rem;
   outline: none;
 }
@@ -145,7 +145,20 @@
 }
 
 .newsletter-btn:hover {
-  background: #e55a2b; /* Un naranja más oscuro al pasar el ratón */
+  background: #e55a2b;
+}
+
+:root[data-theme="light"] .footer {
+  --text-heading: #1a202c;
+}
+
+:root[data-theme="light"] .newsletter-form {
+  background: rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+:root[data-theme="light"] .newsletter-input::placeholder {
+  color: rgba(0, 0, 0, 0.4);
 }
 
 /* Copyright Final */

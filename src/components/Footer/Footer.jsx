@@ -1,7 +1,15 @@
+import { useState } from 'react';
 import './Footer.css';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
+  const [email, setEmail] = useState('');
+
+  const handleNewsletterSubmit = (e) => {
+    e.preventDefault();
+    // Aquí puedes agregar la lógica real de envío (API, Firebase, etc.)
+    setEmail('');
+  };
 
   return (
     <footer id="contacto" className="footer">
@@ -22,9 +30,6 @@ export default function Footer() {
               </a>
               <a href="https://wa.me/593979084514" target="_blank" rel="noreferrer" aria-label="WhatsApp">
                 <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" strokeWidth="2" fill="none"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
-              </a>
-              <a href="https://www.tiktok.com" target="_blank" rel="noreferrer" aria-label="TikTok">
-                <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" strokeWidth="2" fill="none"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"></path></svg>
               </a>
             </div>
           </div>
@@ -56,11 +61,13 @@ export default function Footer() {
           <div className="footer-section">
             <h3>Curso redes de computadoras</h3>
             <p className="footer-desc">Suscríbete para recibir actualizaciones del curso.</p>
-            <form className="newsletter-form" onSubmit={(e) => e.preventDefault()}>
-              <input 
-                type="email" 
+            <form className="newsletter-form" onSubmit={handleNewsletterSubmit}>
+              <input
+                type="email"
                 placeholder="Tu correo electrónico"
                 className="newsletter-input"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 required
               />
               <button type="submit" className="newsletter-btn">
