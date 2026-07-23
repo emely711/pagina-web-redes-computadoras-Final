@@ -133,9 +133,8 @@
 }
 
 .ap-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 16px;
+  columns: 260px 3;
+  column-gap: 16px;
 }
 
 .ap-card {
@@ -147,6 +146,8 @@
   flex-direction: column;
   gap: 10px;
   transition: border-color 0.2s;
+  break-inside: avoid;
+  margin-bottom: 16px;
 }
 
 .ap-card:hover {

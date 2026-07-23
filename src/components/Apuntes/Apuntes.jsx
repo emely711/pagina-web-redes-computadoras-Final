@@ -1,68 +1,48 @@
-// src/components/Apuntes/Apuntes.jsx
-// CRUD (Crear, Leer, Actualizar, Eliminar) de apuntes personales del estudiante.
-// Cada apunte se guarda en Firestore, en la colección "apuntes", ligado al uid
-// del usuario autenticado, de modo que cada quien solo ve y gestiona los suyos.
-
-import { useEffect, useState } from "react";
-import {
-  collection,
-  query,
-  where,
-  onSnapshot,
-  addDoc,
-  updateDoc,
-  deleteDoc,
-  doc,
-  serverTimestamp,
-} from "firebase/firestore";
-import { db } from "../../firebase";
+import { useState } from "react";
 import { temas } from "../../data/temas";
 import "./Apuntes.css";
 
 const FORM_INICIAL = { titulo: "", temaSlug: "", contenido: "" };
 
+// Clave de localStorage por usuario, para que cada quien vea solo sus apuntes
+const claveStorage = (uid) => `apuntes_${uid}`;
+
+// ── Helpers de acceso a localStorage ──
+const leerApuntes = (uid) => {
+  try {
+    const data = localStorage.getItem(claveStorage(uid));
+    return data ? JSON.parse(data) : [];
+  } catch (err) {
+    console.error("Error al leer apuntes de localStorage:", err);
+    return [];
+  }
+};
+
+const guardarApuntes = (uid, apuntes) => {
+  localStorage.setItem(claveStorage(uid), JSON.stringify(apuntes));
+};
+
 export default function Apuntes({ uid }) {
-  const [apuntes, setApuntes] = useState([]);
-  const [cargando, setCargando] = useState(true);
+ const [apuntes, setApuntes] = useState(() => {
+    const lista = leerApuntes(uid);
+    lista.sort((a, b) => (b.fecha || 0) - (a.fecha || 0));
+    return lista;
+  });
+  const [uidAnterior, setUidAnterior] = useState(uid);
   const [form, setForm] = useState(FORM_INICIAL);
   const [editandoId, setEditandoId] = useState(null);
   const [guardando, setGuardando] = useState(false);
   const [error, setError] = useState("");
 
-  // ── READ: escuchar en tiempo real los apuntes del usuario autenticado ──
-  useEffect(() => {
-    if (!uid) return;
-
-    const q = query(collection(db, "apuntes"), where("uid", "==", uid));
-
-    const unsubscribe = onSnapshot(
-      q,
-      (snapshot) => {
-        const lista = snapshot.docs.map((docSnap) => ({
-          id: docSnap.id,
-          ...docSnap.data(),
-        }));
-
-        // Orden descendente por fecha (los más recientes primero).
-        // Se ordena en el cliente para no depender de un índice compuesto en Firestore.
-        lista.sort((a, b) => {
-          const fechaA = a.fecha?.toMillis ? a.fecha.toMillis() : 0;
-          const fechaB = b.fecha?.toMillis ? b.fecha.toMillis() : 0;
-          return fechaB - fechaA;
-        });
-
-        setApuntes(lista);
-        setCargando(false);
-      },
-      (err) => {
-        console.error("Error al leer apuntes:", err);
-        setError("No se pudieron cargar tus apuntes.");
-        setCargando(false);
-      }
-    );
-
-    return () => unsubscribe();
-  }, [uid]);
+  // ── READ: si cambia el usuario (uid), recargar sus apuntes ──
+  // Se ajusta el estado durante el render (patrón recomendado por React),
+  // en vez de usar useEffect, para evitar el warning de setState en efectos.
+  if (uid !== uidAnterior) {
+    setUidAnterior(uid);
+    const lista = uid ? leerApuntes(uid) : [];
+    lista.sort((a, b) => (b.fecha || 0) - (a.fecha || 0));
+    setApuntes(lista);
+  }
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -83,23 +63,31 @@ export default function Apuntes({ uid }) {
     setError("");
 
     try {
+      let nuevaLista;
+
       if (editandoId) {
         // UPDATE: actualiza el apunte existente
-        await updateDoc(doc(db, "apuntes", editandoId), {
-          titulo: form.titulo,
-          temaSlug: form.temaSlug,
-          contenido: form.contenido,
-        });
+        nuevaLista = apuntes.map((a) =>
+          a.id === editandoId
+            ? { ...a, titulo: form.titulo, temaSlug: form.temaSlug, contenido: form.contenido }
+            : a
+        );
       } else {
         // CREATE: crea un apunte nuevo asociado al usuario
-        await addDoc(collection(db, "apuntes"), {
+        const nuevoApunte = {
+          id: crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(36).slice(2)}`,
           uid,
           titulo: form.titulo,
           temaSlug: form.temaSlug,
           contenido: form.contenido,
-          fecha: serverTimestamp(),
-        });
+          fecha: Date.now(),
+        };
+        nuevaLista = [nuevoApunte, ...apuntes];
       }
+
+      nuevaLista.sort((a, b) => (b.fecha || 0) - (a.fecha || 0));
+      guardarApuntes(uid, nuevaLista);
+      setApuntes(nuevaLista);
       limpiarFormulario();
     } catch (err) {
       console.error("Error al guardar el apunte:", err);
@@ -119,12 +107,14 @@ export default function Apuntes({ uid }) {
   };
 
   // ── DELETE ──
-  const handleEliminar = async (id) => {
+  const handleEliminar = (id) => {
     const confirmar = window.confirm("¿Seguro que quieres eliminar este apunte? Esta acción no se puede deshacer.");
     if (!confirmar) return;
 
     try {
-      await deleteDoc(doc(db, "apuntes", id));
+      const nuevaLista = apuntes.filter((a) => a.id !== id);
+      guardarApuntes(uid, nuevaLista);
+      setApuntes(nuevaLista);
       if (editandoId === id) limpiarFormulario();
     } catch (err) {
       console.error("Error al eliminar el apunte:", err);
@@ -143,7 +133,6 @@ export default function Apuntes({ uid }) {
 
       {error && <p className="ap-error">{error}</p>}
 
-      {/* ── Formulario: Crear / Actualizar ── */}
       <form className="ap-form" onSubmit={handleSubmit}>
         <div className="ap-form-row">
           <div className="ap-form-group">
@@ -197,10 +186,7 @@ export default function Apuntes({ uid }) {
         </div>
       </form>
 
-      {/* ── Lista de apuntes ── */}
-      {cargando ? (
-        <p className="ap-empty">Cargando apuntes...</p>
-      ) : apuntes.length === 0 ? (
+      {apuntes.length === 0 ? (
         <p className="ap-empty">Aún no tienes apuntes. ¡Crea el primero arriba! ✍️</p>
       ) : (
         <div className="ap-grid">
