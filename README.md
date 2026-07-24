@@ -1,16 +1,71 @@
-# React + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## ¿Qué es este proyecto?
 
-Currently, two official plugins are available:
+Esta página web fue creada con fines académicos, con el objetivo de ayudar a los estudiantes a comprender de mejor manera la materia de **Redes de Computadoras**. Reúne el temario de la asignatura, respuestas a preguntas frecuentes y un canal de contacto directo, todo en un solo lugar y con acceso mediante cuenta de usuario.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Equipo
 
-## React Compiler
+Mateo Rodriguez 
+Estaban Rodriguez 
+Emely  Bone 
+Marjorie Valdivieso 
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Recorrido por la app
 
-## Expanding the ESLint configuration
+| Sección | Qué encontrarás |
+|---|---|
+| **Inicio** | Landing con presentación del curso |
+| **Sobre Nosotros** | Contexto del proyecto y su propósito |
+| **Temario** | Listado de temas, cada uno con su propia vista de detalle |
+| **Preguntas** | FAQ en formato acordeón |
+| **Contacto** | Formulario de contacto + newsletter |
+| **Login / Registro** | Acceso de usuarios vía correo/contraseña o Google |
+| **Dashboard** | Panel privado, solo visible con sesión iniciada |
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Stack técnico
+
+- **React** — construcción de la interfaz por componentes
+- **Vite** — servidor de desarrollo y build
+- **Firebase Authentication** — login con correo/contraseña y Google
+- **React Router DOM** — navegación entre páginas y protección de la ruta `/dashboard`
+- **React Toastify** — notificaciones de éxito y error
+- **CSS con variables custom** — tema claro/oscuro sincronizado con `localStorage` y la preferencia del sistema
+
+## Puesta en marcha
+
+```bash
+git clone <url-del-repositorio>
+cd redes-computadoras
+npm install
+```
+
+Crea `src/firebase.js` con tu propia configuración de Firebase:
+
+```js
+import { initializeApp } from "firebase/app";
+import { getAuth, GoogleAuthProvider } from "firebase/auth";
+
+const firebaseConfig = {
+  apiKey: "TU_API_KEY",
+  authDomain: "TU_AUTH_DOMAIN",
+  projectId: "TU_PROJECT_ID",
+  storageBucket: "TU_STORAGE_BUCKET",
+  messagingSenderId: "TU_SENDER_ID",
+  appId: "TU_APP_ID",
+};
+
+const app = initializeApp(firebaseConfig);
+export const auth = getAuth(app);
+export const googleProvider = new GoogleAuthProvider();
+```
+
+En Firebase Console, habilita **Email/Password** y **Google** dentro de `Authentication > Sign-in method`.
+
+Levanta el servidor:
+
+```bash
+npm run dev
+```
+
+Disponible en `http://localhost:5173`.
+
