@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import computadoraFondo from '../../assets/computadora_fondo.jpg'; 
+import computadoraFondo from '../../assets/computadora_fondo.webp'; 
 import './Hero.css';
 
 export default function Hero() {

@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { signOut } from 'firebase/auth';
+import { auth } from '../../firebase';
+import { useAuth } from '../../context/AuthContext';
 import ThemeToggle from '../ThemeToggle/ThemeToggle';
 import './Header.css';
 
@@ -8,16 +11,37 @@ import logoImg from '../../assets/favicon.png';
 
 function Header() {
   const [menuActive, setMenuActive] = useState(false);
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
   const toggleMenu = () => {
     setMenuActive(!menuActive);
+  };
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      setMenuActive(false);
+      navigate('/');
+    } catch (error) {
+      console.error('Error al cerrar sesión:', error);
+    }
+  };
+
+  // Genera las iniciales del usuario para el avatar
+  const getInitials = () => {
+    const name = user?.displayName || user?.email || '';
+    const parts = name.split(/[\s@.]+/).filter(Boolean);
+    if (parts.length >= 2) {
+      return (parts[0][0] + parts[1][0]).toUpperCase();
+    }
+    return name.slice(0, 2).toUpperCase();
   };
 
   return (
     <header className="header">
       <div className="navbar-container">
 
-        {/* Aquí usamos la variable logoImg correctamente */}
         <Link to="/" className="logo" onClick={() => setMenuActive(false)}>
           <img src={logoImg} alt="Logo" className="logo-icon" />
           <span className="logo-text">Redes Computadoras</span>
@@ -41,8 +65,22 @@ function Header() {
           </div>
 
           <div className="auth-buttons">
-            <Link to="/login" className="btn-auth login" onClick={() => setMenuActive(false)}>Login</Link>
-            <Link to="/registro" className="btn-auth register" onClick={() => setMenuActive(false)}>Registro</Link>
+            {user ? (
+              <div className="user-badge">
+                <div className="user-avatar">{getInitials()}</div>
+                <span className="user-greeting">
+                  {user.displayName || user.email}
+                </span>
+                <button className="btn-auth logout" onClick={handleLogout}>
+                  Cerrar Sesión
+                </button>
+              </div>
+            ) : (
+              <>
+                <Link to="/login" className="btn-auth login" onClick={() => setMenuActive(false)}>Login</Link>
+                <Link to="/registro" className="btn-auth register" onClick={() => setMenuActive(false)}>Registro</Link>
+              </>
+            )}
             <ThemeToggle />
           </div>
         </nav>

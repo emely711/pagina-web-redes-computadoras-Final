@@ -1,7 +1,30 @@
+import { useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import './Footer.css';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [email, setEmail] = useState('');
+
+  // AQUÍ ESTABA HACIENDO FALTA ESTA FUNCIÓN:
+  const handleSectionClick = (id) => (e) => {
+    e.preventDefault();
+    if (location.pathname === '/') {
+      const el = document.getElementById(id);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' });
+      }
+    } else {
+      navigate('/', { state: { scrollTo: id } });
+    }
+  };
+
+  const handleNewsletterSubmit = (e) => {
+    e.preventDefault();
+    setEmail('');
+  };
 
   return (
     <footer id="contacto" className="footer">

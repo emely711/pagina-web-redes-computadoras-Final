@@ -188,6 +188,7 @@
     flex-direction: row;
     gap: 0.5rem; 
     width: auto;
+    align-items: center;
   }
 }
 
@@ -239,8 +240,6 @@
   box-shadow: 0 0 20px rgba(255, 107, 53, 0.5);
 }
 
-
-
 @keyframes slideDown {
   from {
     opacity: 0;
@@ -276,5 +275,89 @@
 
   100% {
     filter: drop-shadow(0 0 0 rgba(255, 107, 53, 0));
+  }
+}
+
+/* ============ USER BADGE (sesión activa) ============ */
+.user-badge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 107, 53, 0.08);
+  border: 1px solid rgba(255, 107, 53, 0.25);
+  padding: 6px 8px 6px 6px;
+  border-radius: 999px;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.user-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ff6b35, #ff9b6c);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.8rem;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 8px rgba(255, 107, 53, 0.35);
+}
+
+.user-greeting {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--text-primary, #1a202c);
+  white-space: nowrap;
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.btn-auth.logout {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  color: #ff6b35;
+  border: 1px solid #ff6b35;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  white-space: nowrap;
+  transition: all 0.25s ease;
+}
+
+.btn-auth.logout:hover {
+  background: #ff6b35;
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(255, 107, 53, 0.35);
+}
+
+/* Ajuste en móvil: el badge ocupa todo el ancho y se acomoda mejor */
+@media (max-width: 768px) {
+  .user-badge {
+    width: 100%;
+    justify-content: space-between;
+    padding: 10px 12px;
+    border-radius: 12px;
+  }
+
+  .user-greeting {
+    max-width: none;
+    flex: 1;
+  }
+}
+
+/* En desktop, mantenlo compacto y alineado con el resto de botones */
+@media (min-width: 769px) {
+  .user-badge {
+    padding: 4px 6px 4px 4px;
   }
 }
