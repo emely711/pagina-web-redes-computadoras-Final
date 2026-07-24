@@ -1,15 +1,7 @@
-import { useState } from 'react';
 import './Footer.css';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
-  const [email, setEmail] = useState('');
-
-  const handleNewsletterSubmit = (e) => {
-    e.preventDefault();
-    // Aquí puedes agregar la lógica real de envío (API, Firebase, etc.)
-    setEmail('');
-  };
 
   return (
     <footer id="contacto" className="footer">
@@ -37,10 +29,10 @@ export default function Footer() {
           <div className="footer-section">
             <h3>Enlaces Rápidos</h3>
             <ul className="footer-links">
-              <li><a href="#hero">Inicio</a></li>
-              <li><a href="#about">Nosotros</a></li>
-              <li><a href="#temario">Temario</a></li>
-              <li><a href="#preguntas">Preguntas FAQ</a></li>
+              <li><a href="#hero" onClick={handleSectionClick('hero')}>Inicio</a></li>
+              <li><a href="#about" onClick={handleSectionClick('about')}>Nosotros</a></li>
+              <li><a href="#temario" onClick={handleSectionClick('temario')}>Temario</a></li>
+              <li><a href="#preguntas" onClick={handleSectionClick('preguntas')}>Preguntas FAQ</a></li>
             </ul>
           </div>
 

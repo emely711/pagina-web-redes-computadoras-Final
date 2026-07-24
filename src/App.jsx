@@ -1,4 +1,5 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
 
 // Componentes
 import Header from './components/Header/Header';
@@ -21,12 +22,34 @@ import ProtectedRoute from './components/ProtectedRoute';
 
 import './App.css';
 
+// Hace scroll suave hacia la sección indicada en location.state.scrollTo,
+// sin depender del hash de la URL (más confiable en SPA).
+function ScrollToSection() {
+  const location = useLocation();
+
+  useEffect(() => {
+    const targetId = location.state?.scrollTo;
+    if (targetId) {
+      const timer = setTimeout(() => {
+        const el = document.getElementById(targetId);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 150);
+      return () => clearTimeout(timer);
+    }
+  }, [location]);
+
+  return null;
+}
+
 function App() {
   // Rastreador para verificar que React Router y App.jsx estén cargando en el navegador
   console.log("Rastreador: ¡App.jsx se está ejecutando y cargando correctamente!");
 
   return (
     <Router>
+      <ScrollToSection />
       <div className="app-container">
         <Header />
         

@@ -1,9 +1,10 @@
 import { useNavigate, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { auth } from "../firebase"; // <-- CORREGIDO: ../ para salir de la carpeta pages
+import { auth } from "../firebase"; 
 import { signOut, onAuthStateChanged } from "firebase/auth";
 import { temas } from "../data/temas";
 import Apuntes from "../components/Apuntes/Apuntes";
+import Estadisticas from "../components/Estadisticas/Estadisticas";
 import "./Dashboard.css";
 
 export default function Dashboard() {
@@ -11,6 +12,7 @@ export default function Dashboard() {
   const [nombre, setNombre] = useState("Estudiante");
   const [uid, setUid] = useState(null);
   const [cargando, setCargando] = useState(true);
+  const [apuntesActuales, setApuntesActuales] = useState([]);
 
   useEffect(() => {
     const verificarSesion = onAuthStateChanged(auth, (user) => {
@@ -97,7 +99,9 @@ export default function Dashboard() {
         </div>
       </div>
 
-      <Apuntes uid={uid} />
+      <Apuntes uid={uid} onApuntesChange={setApuntesActuales} />
+
+      <Estadisticas apuntes={apuntesActuales} />
     </div>
   );
 }

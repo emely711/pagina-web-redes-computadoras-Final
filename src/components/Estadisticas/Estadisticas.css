@@ -1,0 +1,46 @@
+.est-section {
+margin-top: 3rem;
+}
+
+.est-empty {
+color: var(--text-secondary, #a8b5d1);
+margin-top: 1rem;
+font-size: 0.95rem;
+}
+
+.est-grid {
+display: grid;
+grid-template-columns: 1.5fr 1fr;
+gap: 1.5rem;
+margin-top: 1rem;
+}
+
+@media (max-width: 900px) {
+.est-grid {
+    grid-template-columns: 1fr;
+}
+}
+
+.est-card {
+background: var(--card-bg, #1a2235);
+border: 1px solid var(--border-color, #2d4059);
+border-radius: 1rem;
+padding: 1.5rem;
+}
+
+.est-card-titulo {
+font-size: 1rem;
+color: var(--text-primary, #ffffff);
+margin-bottom: 1rem;
+font-weight: 600;
+}
+
+.est-chart-wrapper {
+position: relative;
+height: 280px;
+}
+
+.est-chart-doughnut {
+max-width: 260px;
+margin: 0 auto;
+}

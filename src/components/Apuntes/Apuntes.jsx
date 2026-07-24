@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { temas } from "../../data/temas";
 import "./Apuntes.css";
 
@@ -22,7 +22,7 @@ const guardarApuntes = (uid, apuntes) => {
   localStorage.setItem(claveStorage(uid), JSON.stringify(apuntes));
 };
 
-export default function Apuntes({ uid }) {
+export default function Apuntes({ uid, onApuntesChange  }) {
  const [apuntes, setApuntes] = useState(() => {
     const lista = leerApuntes(uid);
     lista.sort((a, b) => (b.fecha || 0) - (a.fecha || 0));
@@ -33,6 +33,12 @@ export default function Apuntes({ uid }) {
   const [editandoId, setEditandoId] = useState(null);
   const [guardando, setGuardando] = useState(false);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (onApuntesChange) {
+      onApuntesChange(apuntes);
+    }
+  }, [apuntes, onApuntesChange]);
 
   // ── READ: si cambia el usuario (uid), recargar sus apuntes ──
   // Se ajusta el estado durante el render (patrón recomendado por React),
