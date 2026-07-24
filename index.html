@@ -5,6 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="NetCourse - Aprende Redes de Computadoras con una plataforma educativa profesional" />
     <meta name="theme-color" content="#0f1419" />
+
+    <!-- Política de Seguridad de Contenido (CSP) ajustada para Zapier, Firebase Auth, WebSockets de Vite y Recursos Externos -->
+    <meta 
+      http-equiv="Content-Security-Policy" 
+      content="
+        default-src 'self';
+        script-src 'self' 'unsafe-inline' 'unsafe-eval' https://interfaces.zapier.com https://apis.google.com https://www.gstatic.com;
+        style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+        font-src 'self' https://fonts.gstatic.com data:;
+        img-src 'self' data: https:;
+        connect-src 'self' ws://localhost:* http://localhost:* https://*.zapier.com https://*.zapier-staging.com https://*.ada.support https://*.zapier.app https://apis.google.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://*.firebaseio.com wss://*.firebaseio.com https://firestore.googleapis.com;
+        frame-src 'self' https://interfaces.zapier.com https://*.zapier.app https://accounts.google.com https://*.firebaseapp.com;
+      "
+    />
+
     <title>Redes de Computadoras</title>
     
     <link rel="icon" type="image/png" href="./src/assets/favicon.png" />
@@ -16,7 +31,11 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
+    
+    <!-- Embed del Chatbot de Zapier -->
     <script async type='module' src='https://interfaces.zapier.com/assets/web-components/zapier-interfaces/zapier-interfaces.esm.js'></script>
-<zapier-interfaces-chatbot-embed is-popup='true' chatbot-id='cmrvez32k002wjwfcn9t7cz7j'></zapier-interfaces-chatbot-embed>
+    <zapier-interfaces-chatbot-embed is-popup='true' chatbot-id='cmrvez32k002wjwfcn9t7cz7j'></zapier-interfaces-chatbot-embed>
   </body>
 </html>
+<!-- <script async type='module' src='https://interfaces.zapier.com/assets/web-components/zapier-interfaces/zapier-interfaces.esm.js'></script>
+<zapier-interfaces-chatbot-embed is-popup='true' chatbot-id='cmrvez32k002wjwfcn9t7cz7j'></zapier-interfaces-chatbot-embed> -->

@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 import './Temario.css';
 
 export default function Temario() {
   const [expandedId, setExpandedId] = useState(null);
+  const { user } = useAuth();
 
   const temas = [
     { id: 1, titulo: 'Conceptos Básicos de Redes', icon: '🌐', descripcion: 'Introducción a los principios fundamentales de la comunicación de datos.', detalles: 'Aprenderás los conceptos esenciales para entender cómo funcionan las redes, incluyendo topologías, tipos de redes y medios de transmisión.' },
@@ -54,8 +56,11 @@ export default function Temario() {
               {expandedId === tema.id && (
                 <div className="tema-content">
                   <p>{tema.detalles}</p>
-                  <Link to={localStorage.getItem("sesion") ? `/temario/${tema.titulo.toLowerCase().replace(/[^a-z0-9]+/g, '-')}` 
-                    : "/login"} className="btn-secondary">Iniciar Tema
+                  <Link 
+                    to={user ? `/temario/${tema.titulo.toLowerCase().replace(/[^a-z0-9]+/g, '-')}` : "/login"} 
+                    className="btn-secondary"
+                  >
+                    Iniciar Tema
                   </Link>
                 </div>
               )}

@@ -8,9 +8,6 @@ export default function Footer() {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
 
-  // Si ya estamos en Inicio, hacemos scroll directo.
-  // Si estamos en otra página, navegamos a Inicio pasando qué sección
-  // queremos, y App.jsx (ScrollToSection) hace el scroll cuando cargue.
   const handleSectionClick = (id) => (e) => {
     e.preventDefault();
     if (location.pathname === '/') {

@@ -1,6 +1,9 @@
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 
+// Contexto de autenticación
+import { AuthProvider } from './context/AuthContext';
+
 // Componentes
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
@@ -48,51 +51,53 @@ function App() {
   console.log("Rastreador: ¡App.jsx se está ejecutando y cargando correctamente!");
 
   return (
-    <Router>
-      <ScrollToSection />
-      <div className="app-container">
-        <Header />
-        
-        <main className="content-container">
-          <Routes>
-            {/* Inicio: Landing Page completa */}
-            <Route path="/" element={
-              <>
-                <Hero />
-                <About />
-                <Temario />
-                <Preguntas />
-                <Formulario />
-              </>
-            } />
+    <AuthProvider>
+      <Router>
+        <ScrollToSection />
+        <div className="app-container">
+          <Header />
+          
+          <main className="content-container">
+            <Routes>
+              {/* Inicio: Landing Page completa */}
+              <Route path="/" element={
+                <>
+                  <Hero />
+                  <About />
+                  <Temario />
+                  <Preguntas />
+                  <Formulario />
+                </>
+              } />
 
-            {/* Rutas individuales */}
-            <Route path="/nosotros" element={<About />} />
-            <Route path="/temario" element={<Temario />} />
-            
-            {/* RUTA DINÁMICA: Aquí se cargará el contenido de cada tema */}
-            <Route path="/temario/:temaSlug" element={<TemaDetail />} />
+              {/* Rutas individuales */}
+              <Route path="/nosotros" element={<About />} />
+              <Route path="/temario" element={<Temario />} />
+              
+              {/* RUTA DINÁMICA: Aquí se cargará el contenido de cada tema */}
+              <Route path="/temario/:temaSlug" element={<TemaDetail />} />
 
-            <Route path="/preguntas" element={<Preguntas />} />
-            <Route path="/contacto" element={<Formulario />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/registro" element={<Register />} />
-            
-            {/* Ruta protegida: solo usuarios logueados pueden entrar (AQUI ESTA LA RUTA PROTEGIDA*/}
-            <Route path="/dashboard" element={
-              <ProtectedRoute>
-                <Dashboard />
-              </ProtectedRoute>
-            } />
-            
-            {/* Ruta para manejar errores 404 */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </main>
-        
-        <Footer />
-      </div>
-    </Router>
+              <Route path="/preguntas" element={<Preguntas />} />
+              <Route path="/contacto" element={<Formulario />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/registro" element={<Register />} />
+              
+              {/* Ruta protegida: solo usuarios logueados pueden entrar */}
+              <Route path="/dashboard" element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              } />
+              
+              {/* Ruta para manejar errores 404 */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </main>
+          
+          <Footer />
+        </div>
+      </Router>
+    </AuthProvider>
   );
 }
 
