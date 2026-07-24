@@ -8,7 +8,6 @@ export default function Footer() {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
 
-  // AQUÍ ESTABA HACIENDO FALTA ESTA FUNCIÓN:
   const handleSectionClick = (id) => (e) => {
     e.preventDefault();
     if (location.pathname === '/') {
@@ -23,6 +22,7 @@ export default function Footer() {
 
   const handleNewsletterSubmit = (e) => {
     e.preventDefault();
+    // Lógica de envío (API, Firebase, etc.)
     setEmail('');
   };
 
